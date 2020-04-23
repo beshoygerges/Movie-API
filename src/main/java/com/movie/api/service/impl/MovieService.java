@@ -26,8 +26,8 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public void addMovie(Movie movie) {
-        movieRepository.save(movie);
+    public Movie addMovie(Movie movie) {
+        return movieRepository.save(movie);
     }
 
     @Override
@@ -37,9 +37,10 @@ public class MovieService implements IMovieService {
     }
 
     @Override
-    public void updateMovie(Movie movie) throws MovieNotFoundException {
-        getMovieById(movie.getId());
-        movieRepository.save(movie);
+    public Movie updateMovie(int id, Movie movie) throws MovieNotFoundException {
+        getMovieById(id);
+        movie.setId(id);
+        return movieRepository.save(movie);
     }
 
     @Override

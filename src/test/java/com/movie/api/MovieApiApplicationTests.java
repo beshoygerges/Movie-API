@@ -40,7 +40,7 @@ public class MovieApiApplicationTests {
     @Test
     public void getNotFoundMovieByIdThrows() {
         ResponseEntity<Movie> response = restTemplate.getForEntity(getServerUrl() + "/100", Movie.class);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class MovieApiApplicationTests {
                 .build();
 
         ResponseEntity<String> response = restTemplate.postForEntity(getServerUrl(), movie, String.class);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
 
     }
 
@@ -76,7 +76,7 @@ public class MovieApiApplicationTests {
                 .rating(5.0)
                 .build();
 
-        restTemplate.put(getServerUrl(), movie);
+        restTemplate.put(getServerUrl() + "/1", movie);
         ResponseEntity<Movie> response = restTemplate.getForEntity(getServerUrl() + "/1", Movie.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(5, response.getBody().getRating(), 0);
@@ -87,7 +87,7 @@ public class MovieApiApplicationTests {
     public void deleteMovieByIdReturns() {
         restTemplate.delete(getServerUrl() + "/1");
         ResponseEntity<Movie> response = restTemplate.getForEntity(getServerUrl() + "/1", Movie.class);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     private String getServerUrl() {

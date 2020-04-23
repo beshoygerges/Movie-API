@@ -6,11 +6,11 @@ import com.movie.api.model.Movie;
 public interface IMovieService {
     Iterable<Movie> getAllMovies();
 
-    void addMovie(Movie movie);
+    Movie addMovie(Movie movie);
 
     void deleteMovieById(Integer id) throws MovieAPIException.MovieNotFoundException;
 
-    void updateMovie(Movie movie) throws MovieAPIException.MovieNotFoundException;
+    Movie updateMovie(int id, Movie movie) throws MovieAPIException.MovieNotFoundException;
 
     Movie getMovieById(Integer id) throws MovieAPIException.MovieNotFoundException;
 }

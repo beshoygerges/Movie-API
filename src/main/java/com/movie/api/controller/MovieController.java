@@ -4,7 +4,8 @@ import com.movie.api.exception.MovieAPIException.MovieNotFoundException;
 import com.movie.api.model.Movie;
 import com.movie.api.service.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,23 +28,39 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public Movie getMovieById(@PathVariable @NotNull Integer id) throws MovieNotFoundException {
-        return movieService.getMovieById(id);
+    public ResponseEntity<Movie> getMovieById(@PathVariable @NotNull Integer id) {
+        try {
+            Movie movie = movieService.getMovieById(id);
+            return ResponseEntity.ok(movie);
+        } catch (MovieNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public void addMovie(@RequestBody @Valid Movie movie) {
-        movieService.addMovie(movie);
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Movie> addMovie(@RequestBody @Valid Movie movie) {
+        movie = movieService.addMovie(movie);
+        return ResponseEntity.ok(movie);
     }
 
-    @PutMapping
-    public void updateMovie(@RequestBody @Valid Movie movie) throws MovieNotFoundException {
-        movieService.updateMovie(movie);
+    @PutMapping("/{id}")
+    public ResponseEntity<Movie> updateMovie(@PathVariable int id, @RequestBody @Valid Movie movie) {
+        try {
+            movie = movieService.updateMovie(id, movie);
+            return ResponseEntity.ok(movie);
+        } catch (MovieNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMovieById(@PathVariable @NotNull Integer id) throws MovieNotFoundException {
-        movieService.deleteMovieById(id);
+    public ResponseEntity<Object> deleteMovieById(@PathVariable @NotNull Integer id) {
+        try {
+            movieService.deleteMovieById(id);
+            return ResponseEntity.noContent().build();
+        } catch (MovieNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
